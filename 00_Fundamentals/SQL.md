@@ -709,6 +709,19 @@ HAVING SUM(access_log.count) > 200;
 | 菜鸟教程  | http://www.runoob.com/   |  521 |
 +---------+---------------------------+------+
 
+SELECT Websites.name, SUM(access_log.count) AS nums FROM Websites
+INNER JOIN access_log
+ON Websites.id=access_log.site_id
+WHERE Websites.alexa < 200 
+GROUP BY Websites.name
+HAVING SUM(access_log.count) > 200;
+
++---------+------+
+| name    | nums |
++---------+------+
+| Google  |  275 |
+| Facebook |  750 |
++---------+------+
 ```
 
 ### 4.6 EXISTS 语句
