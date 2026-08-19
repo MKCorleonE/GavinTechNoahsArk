@@ -1,20 +1,47 @@
-# SQL 学习手册（简体中文版）
-
+# SQL 快如入门手册（简体中文版）
+版本：1.0.3  
+作者: MKCorleonE (https://mkcorleone.github.io/)  
+仓库: https://github.com/MKCorleonE/GavinTechNoahsArk.git/00_Fundamentals/SQL.md  
+鸣谢: 菜鸟教程 (https://www.runoob.com/sql/sql-tutorial.html)
 ## 目录
 - [1 SQL 简介](#1-sql-简介)
   - [1.1 SQL是什么?](#11-sql是什么)
   - [1.2 SQL 能做什么？](#12-ql-能做什么)
-- [2 SQL 语法引言](#sql-语法引言)
+- [2 SQL 语法引言](#2-sql-语法引言)
   - [2.1 数据库表](#21-数据库表)
   - [2.2 关于大小写](#22-关于大小写)
   - [2.3 关于分号结尾](#23-关于分号结尾)
-- [3 SQL 语句](#sql-语句)
+- [3 SQL 语句](#3-sql-语句)
   - [3.1 SELECT 语句](#31-select-语句)
   - [3.2 SELECT DISTINCT 语句](#32-select-distinct-语句)
   - [3.3 INSERT INTO 语句](#33-insert-into-语句)
   - [3.4 UPDATE 语句](#34-update-语句)
   - [3.5 DELETE 语句](#35-delete-语句)
-- [4 SQL 数据类型](#sql-数据类型)
+- [4 SQL 进阶语句](#4-sql-进阶语句)
+  - [4.1 SELECT TOP (LIMIT) 语句](#41-select-top-(limit)-语句)
+  - [4.2 LIKE 语句](#42-like-语句)
+  - [4.3 IN 语句](#43-in-语句)
+  - [4.4 GROUP BY 语句](#44-group-by-语句)
+  - [4.5 HAVING 语句](#45-having-语句)
+  - [4.6 EXISTS 语句](#46-exists-语句)
+  - 
+- [5 SQL 函数](#5-sql-函数)
+  - [5.1 AVG() 函数](#51-avg-函数)
+  - [5.2 COUNT() 函数](#52-count-函数)
+  - [5.3 FIRST() 函数](#53-first-函数)
+  - [5.4 LAST() 函数](#54-last-函数)
+  - [5.5 MAX() 函数](#55-max-函数)
+  - [5.6 MIN() 函数](#56-min-函数)
+  - [5.7 SUM() 函数](#57-sum-函数)
+  - [5.8 UCASE() 函数](#58-ucase-函数)
+  - [5.9 LCASE() 函数](#59-lcase-函数)
+  - [5.10 MID() 函数](#510-mid-函数)
+  - [5.11 LEN() 函数](#511-len-函数)
+  - [5.12 ROUND() 函数](#512-round-函数)
+  - [5.13 NOW() 函数](#513-now-函数)
+  - [5.14 FORMAT() 函数](#514-format-函数)
+- [6 SQL 数据类型](#6-sql-数据类型)
+- [7 SQL 快速参考](#7-sql-快速参考)
 
 ## 1 SQL 简介
 > SQL (Structured Query Language:结构化查询语言) 是用于管理关系数据库管理系统（RDBMS）。SQL 通过一系列的语句和命令来执行数据定义、数据查询、数据操作和数据控制等功能,包括数据插入、查询、更新和删除，数据库模式创建和修改，以及数据访问控制。
@@ -365,3 +392,730 @@ ORDER BY country,alexa;
 | 1  | Google       | https://www.google.cm/    | 1     | USA     |
 | 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
 ```
+
+## 4 SQL 进阶语句
+> SQL 进阶语句包括 SELECT TOP、LIKE、IN、GROUP BY、HAVING 和 EXISTS 等语句，这些语句可以帮助您更高效地查询和操作数据库。
+
+### 4.1 SELECT TOP (LIMIT) 语句
+`SELECT TOP` 语句用于在 SQL 中限制返回的结果集中的行数， 它通常用于只需要查询前几行数据的情况，尤其在数据集非常大时，可以显著提高查询性能。`SELECT TOP` 子句对于拥有数千条记录的大型表来说，是非常有用的。
+
+#### 说明：
+- `SELECT TOP` 在 SQL Server 和 MS Access 中使用，而在 MySQL 和 PostgreSQL 中使用 `LIMIT` 关键字。
+- Oracle 在 12c 版本之前没有直接等效的关键字，可以通过 `ROWNUM` 实现类似功能，但在 12c 及以上版本中引入了 `FETCH FIRST`。
+- 当使用 `TOP` 或 `LIMIT` 时，最好结合 `ORDER BY` 子句，以确保返回的行是特定顺序的前几行。
+
+#### SQL Server / MS Access 语法
+```sql
+SELECT TOP number|percent column1, column2, ...
+FROM table_name;
+```
+注释：
+- `number`：具体的行数。
+- `percent`：数据集的百分比。
+
+#### MySQL 语法
+```sql
+SELECT column1, column2, ...
+FROM table_name
+LIMIT number;
+```
+
+#### Oracle 语法
+```sql
+SELECT column1, column2, ...
+FROM table_name
+FETCH FIRST number ROWS ONLY;
+```
+
+#### PostgreSQL 语法
+```sql
+SELECT column1, column2, ...
+FROM table_name
+LIMIT number;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites" 表的数据：
+```sql
+SELECT * FROM Websites;
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  1 | Google        | https://www.google.cm/    |     1 | USA     |
+|  2 | 淘宝          | https://www.taobao.com/   |    13 | CN      |
+|  3 | 菜鸟教程       | http://www.runoob.com/    |  5000 | USA     |
+|  4 | 微博           | http://weibo.com/         |    20 | CN      |
+|  5 | Facebook      | https://www.facebook.com/ |     3 | USA     |
+|  6 | stackoverflow | http://stackoverflow.com/ |     0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT * FROM Websites LIMIT 2;
+
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  1 | Google        | https://www.google.cm/    |     1 | USA     |
+|  2 | 淘宝          | https://www.taobao.com/   |    13 | CN      |
++----+---------------+---------------------------+-------+---------+
+
+SELECT TOP 50 PERCENT * FROM Websites;
+
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  1 | Google        | https://www.google.cm/    |     1 | USA     |
+|  2 | 淘宝          | https://www.taobao.com/   |    13 | CN      |
+|  3 | 菜鸟教程       | http://www.runoob.com/    |  5000 | USA     |
++----+---------------+---------------------------+-------+---------+
+
+```
+
+## 5 SQL 函数
+> SQL 拥有很多可用于计数和计算的内建函数。SQL 函数可以用于计算数据、格式化数据、处理字符串、日期和时间等。SQL 函数可以分为以下两类。
+
+### SQL Aggregate 函数
+SQL Aggregate 函数计算从列中取得的值，返回一个单一的值。常用的有如下：
+- AVG() - 返回平均值
+- COUNT() - 返回行数
+- FIRST() - 返回第一个记录的值
+- LAST() - 返回最后一个记录的值
+- MAX() - 返回最大值
+- MIN() - 返回最小值
+- SUM() - 返回总和
+
+### SQL Scalar 函数
+SQL Scalar 函数基于输入值，返回一个单一的值。常用的有如下：
+- UCASE() - 将某个字段转换为大写
+- LCASE() - 将某个字段转换为小写
+- MID() - 从某个文本字段提取字符，MySql 中使用
+- SubString(字段，1，end) - 从某个文本字段提取字符
+- LEN() - 返回某个文本字段的长度
+- ROUND() - 对某个数值字段进行指定小数位数的四舍五入
+- NOW() - 返回当前的系统日期和时间
+- FORMAT() - 格式化某个字段的显示方式
+
+### 5.1 AVG() 函数
+> AVG() 函数返回数值列的平均值。
+
+#### 语法
+```sql
+SELECT AVG(column_name) FROM table_name
+```
+
+#### 示例  
+在本教程中，我们将使用 RUNOOB 样本数据库。下面是选自 "access_log" 表的数据：
+```sql
++-----+---------+-------+------------+
+| aid | site_id | count | date       |
++-----+---------+-------+------------+
+|   1 |       1 |    45 | 2016-05-10 |
+|   2 |       3 |   100 | 2016-05-13 |
+|   3 |       1 |   230 | 2016-05-14 |
+|   4 |       2 |    10 | 2016-05-14 |
+|   5 |       5 |   205 | 2016-05-14 |
+|   6 |       4 |    13 | 2016-05-15 |
+|   7 |       3 |   220 | 2016-05-15 |
+|   8 |       5 |   545 | 2016-05-16 |
+|   9 |       3 |   201 | 2016-05-17 |
++-----+---------+-------+------------+
+
+SELECT AVG(count) AS CountAverage FROM access_log;
+
++----------------+
+| CountAverage   |
++----------------+
+|  174.3333      |
++----------------+
+
+SELECT site_id, count FROM access_log 
+WHERE count > (SELECT AVG(count) FROM access_log);
+
++----------+-------+
+| site_id  | count |
++----------+-------+
+|  3       |   220 |
+|  5       |   545 |
+|  3       |   201 |
+|  1       |   230 |
+|  5       |   205 |
++----------+-------+
+```
+
+### 5.2 COUNT() 函数
+> COUNT() 函数返回匹配指定条件的行数。
+
+#### SQL COUNT(column_name) 语法
+COUNT(column_name) 函数返回指定列的值的数目（NULL 不计入），可以结合 WHERE 子句使用。
+```sql
+SELECT COUNT(column_name) FROM table_name;
+```
+
+#### SQL COUNT(*) 语法
+COUNT(*) 函数返回表中的总记录数
+```sql
+SELECT COUNT(*) FROM table_name;
+```
+
+#### SQL COUNT(DISTINCT column_name) 语法
+COUNT(DISTINCT column_name) 函数返回指定列的不同值的数目
+```sql
+SELECT COUNT(DISTINCT column_name) FROM table_name;
+```
+注释：COUNT(DISTINCT) 适用于 ORACLE 和 Microsoft SQL Server，但是无法用于 Microsoft Access。
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "access_log" 表的数据
+```sql
++-----+---------+-------+------------+
+| aid | site_id | count | date       |
++-----+---------+-------+------------+
+|   1 |       1 |    45 | 2016-05-10 |
+|   2 |       3 |   100 | 2016-05-13 |
+|   3 |       1 |   230 | 2016-05-14 |
+|   4 |       2 |    10 | 2016-05-14 |
+|   5 |       5 |   205 | 2016-05-14 |
+|   6 |       4 |    13 | 2016-05-15 |
+|   7 |       3 |   220 | 2016-05-15 |
+|   8 |       5 |   545 | 2016-05-16 |
+|   9 |       3 |   201 | 2016-05-17 |
++-----+---------+-------+------------+
+
+SELECT COUNT(count) AS nums FROM access_log
+WHERE site_id=3;
+
++------+
+| nums |
++------+
+| 3    |
++------+
+
+SELECT COUNT(*) AS nums FROM access_log;
+
++------+
+| nums |
++------+
+|  9   |
++------+
+
+SELECT COUNT(DISTINCT site_id) AS nums FROM access_log;
+
++------+
+| nums |
++------+
+|  5   |
++------+
+```
+
+### 5.3 FIRST() 函数
+> FIRST() 函数返回指定的列中第一个记录的值。
+
+#### SQL FIRST() 语法
+```sql
+SELECT FIRST(column_name) FROM table_name;
+```
+注释：只有 MS Access 支持 FIRST() 函数。
+
+#### SQL Server、MySQL 和 Oracle 中的 SQL FIRST() 工作区
+`FIRST()` 并不是一个通用的 SQL 标准函数，而仅仅是 Microsoft Access 数据库特有的功能。
+当我们在 SQL Server、MySQL 或 Oracle 中编写“获取第一条记录”的语句时，之所以不包含 `FIRST` 字段，是因为这些数据库根本不支持这个函数。如果我们强行在这些数据库中使用 `SELECT FIRST(column_name)...`，系统会直接报错。为了在这些主流数据库中实现“获取第一条记录”的效果，我们需要采用“排序 + 限制行数”的替代方案（也就是所谓的“工作区”）。
+
+#### SQL Server 语法
+```sql
+SELECT TOP 1 column_name FROM table_name
+ORDER BY column_name ASC;
+```
+
+#### MySQL 语法
+```sql
+SELECT column_name FROM table_name
+ORDER BY column_name ASC
+LIMIT 1;
+```
+
+#### Oracle 语法
+```sql
+SELECT column_name FROM table_name
+ORDER BY column_name ASC
+WHERE ROWNUM <=1;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites" 表的数据
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+|  6 | 百度         | https://www.baidu.com/    |     4 | CN      |
+|  7 | stackoverflow | http://stackoverflow.com/ |     0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT name AS FirstSite FROM Websites LIMIT 1;
+
++-----------+
+| FirstSite |
++-----------+
+| Google    |
++-----------+
+```
+
+### 5.4 LAST() 函数
+> LAST() 函数返回指定的列中最后一个记录的值。
+
+#### SQL LAST() 语法
+```sql
+SELECT LAST(column_name) FROM table_name;
+```
+注释：只有 MS Access 支持 LAST() 函数。
+
+#### SQL Server、MySQL 和 Oracle 中的 SQL LAST() 工作区
+#### SQL Server 语法
+```sql
+SELECT TOP 1 column_name FROM table_name
+ORDER BY column_name DESC;
+```
+
+#### MySQL 语法
+```sql
+SELECT column_name FROM table_name
+ORDER BY column_name DESC
+LIMIT 1;
+```
+
+#### Oracle 语法
+```sql
+SELECT column_name FROM table_name
+ORDER BY column_name DESC
+WHERE ROWNUM <=1;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites" 表的数据
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+|  6 | 百度         | https://www.baidu.com/    |     4 | CN      |
+|  7 | stackoverflow | http://stackoverflow.com/ |     0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT name FROM Websites
+ORDER BY id DESC
+LIMIT 1;
+
++------------------+
+|   name           |
++------------------+
+| stackoverflow    |
++------------------+
+```
+
+### 5.5 MAX() 函数
+> MAX() 函数返回指定列中的最大值。
+
+#### SQL MAX() 语法
+```sql
+SELECT MAX(column_name) FROM table_name;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites" 表的数据
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+|  6 | 百度         | https://www.baidu.com/    |     4 | CN      |
+|  7 | stackoverflow | http://stackoverflow.com/ |     0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT MAX(alexa) AS max_alexa FROM Websites;
+
++------------------+
+|   max_alex       |
++------------------+
+|      4689        |
++------------------+
+```
+
+### 5.6 MIN() 函数
+> MIN() 函数返回指定列中的最小值。
+#### SQL MAX() 语法
+```sql
+SELECT MIN(column_name) FROM table_name;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites" 表的数据
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+|  6 | 百度         | https://www.baidu.com/    |     4 | CN      |
+|  7 | stackoverflow | http://stackoverflow.com/ |     0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT MIN(alexa) AS min_alexa FROM Websites;
+
++------------------+
+|   min_alex       |
++------------------+
+|        0         |
++------------------+
+```
+
+### 5.7 SUM() 函数
+> SUM() 函数返回数值列的总数。
+#### SQL SUM() 语法
+```sql
+SELECT SUM(column_name) FROM table_name;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "access_log" 表的数据
+```sql
+SELECT * FROM access_log;
++-----+---------+-------+------------+
+| aid | site_id | count | date       |
++-----+---------+-------+------------+
+|   1 |       1 |    45 | 2016-05-10 |
+|   2 |       3 |   100 | 2016-05-13 |
+|   3 |       1 |   230 | 2016-05-14 |
+|   4 |       2 |    10 | 2016-05-14 |
+|   5 |       5 |   205 | 2016-05-14 |
+|   6 |       4 |    13 | 2016-05-15 |
+|   7 |       3 |   220 | 2016-05-15 |
+|   8 |       5 |   545 | 2016-05-16 |
+|   9 |       3 |   201 | 2016-05-17 |
++-----+---------+-------+------------+
+
+SELECT SUM(count) AS nums FROM access_log;
+
++------+
+| nums |
++------+
+| 1569 |
+```
+
+### 5.8 UCASE() 函数
+> UCASE() 函数将指定列的值转换为大写。
+
+#### SQL UCASE() 语法
+```sql
+SELECT UCASE(column_name) FROM table_name;
+```
+
+#### 用于 SQL Server 的语法
+```sql
+SELECT UPPER(column_name) FROM table_name;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites" 表的数据：
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+| 7  | stackoverflow | http://stackoverflow.com/ |   0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT UCASE(name) AS site_title, url
+FROM Websites;
+
++------------------+---------------------------+
+| site_title       | url                       |
++------------------+---------------------------+
+| GOOGLE           | https://www.google.cm/    |
+| 淘宝              | https://www.taobao.com/   |
+| 菜鸟教程          | http://www.runoob.com/    |
+| 微博              | http://weibo.com/         |
+| FACEBOOK         | https://www.facebook.com/ |
+| STACKOVERFLOW    | http://stackoverflow.com/ |
++------------------+---------------------------+
+```
+
+### 5.9 LCASE() 函数
+> UCASE() 函数将指定列的值转换为大写。
+
+#### SQL LCASE() 语法
+```sql
+SELECT LCASE(column_name) FROM table_name;
+```
+
+#### 用于 SQL Server 的语法
+```sql
+SELECT LOWER(column_name) FROM table_name;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites" 表的数据：
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+| 7  | stackoverflow | http://stackoverflow.com/ |   0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT LCASE(name) AS site_title, url
+FROM Websites;
+
++------------------+---------------------------+
+| site_title       | url                       |
++------------------+---------------------------+
+| google           | https://www.google.cm/    |
+| 淘宝              | https://www.taobao.com/   |
+| 菜鸟教程          | http://www.runoob.com/    |
+| 微博              | http://weibo.com/         |
+| facebook         | https://www.facebook.com/ |
+| stackoverflow    | http://stackoverflow.com/ |
++------------------+---------------------------+
+```
+
+### 5.10 MID() 函数
+> MID() 函数用于从指定的字符串中提取子字符串。
+
+#### SQL MID() 语法
+```sql
+SELECT MID(column_name[,start,length]) FROM table_name;
+```
+- `column_name`	必需。要提取字符的字段。
+- `start`	必需。规定开始位置（起始值是 1）。
+- `length`	可选。要返回的字符数。如果省略，则 MID() 函数返回剩余文本。
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites" 表的数据：
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+| 7  | stackoverflow | http://stackoverflow.com/ |   0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT MID(name,1,4) AS ShortTitle
+FROM Websites;
+
++------------+
+| ShortTitle |
++------------+
+| Goog       |
+| 淘宝        |
+| 菜鸟教程    |
+| 微博        |
+| Face       |
+| stac       |
+```
+
+### 5.11 LEN() 函数
+> LEN() 函数返回指定列的字符长度。
+
+#### SQL LEN() 语法
+```sql
+SELECT LEN(column_name) FROM table_name;
+```
+MySQL 中函数为 LENGTH():
+```sql
+SELECT LENGTH(column_name) FROM table_name;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites"
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+| 7  | stackoverflow | http://stackoverflow.com/ |   0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT name, LENGTH(url) as LengthOfURL
+FROM Websites;
+
++------------------+----------------+
+| name             | LengthOfURL    |
++------------------+----------------+
+| Google           | 26             |
+| 淘宝              | 27             |
+| 菜鸟教程          | 27             |
+| 微博              | 22             |
+| Facebook         | 35             |
+| stackoverflow    | 33             |
++------------------+----------------+
+```
+
+### 5.12 ROUND() 函数
+> ROUND() 函数用于对数值字段进行指定小数位数的四舍五入。
+
+#### SQL ROUND() 语法
+```sql
+SELECT ROUND(column_name,decimals) FROM TABLE_NAME;
+```
+
+#### 示例
+```sql
+mysql> SELECT ROUND(-1.23);
+        -> -1
+mysql> SELECT ROUND(-1.58);
+        -> -2
+mysql> SELECT ROUND(1.58);
+        -> 2
+
+mysql> SELECT ROUND(1.298, 1);
+        -> 1.3
+mysql> SELECT ROUND(1.298, 0);
+        -> 1
+```
+注意：ROUND 返回值被变换为一个BIGINT!
+
+### 5.13 NOW() 函数
+> NOW() 函数返回当前的系统日期和时间。
+
+#### SQL NOW() 语法
+```sql
+SELECT NOW() FROM table_name;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites" 表的数据：
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+| 7  | stackoverflow | http://stackoverflow.com/ |   0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT name, url, Now() AS date
+FROM Websites;
+
++------------------+---------------------------+---------------------+
+| name             | url                       | date                |
++------------------+---------------------------+---------------------+
+| Google           | https://www.google.cm/    | 2024-06-10 12:34:56 |
+| 淘宝              | https://www.taobao.com/   | 2024-06-10 12:34:56 |
+| 菜鸟教程          | http://www.runoob.com/    | 2024-06-10 12:34:56 |
+| 微博              | http://weibo.com/         | 2024-06-10 12:34:56 |
+| Facebook         | https://www.facebook.com/ | 2024-06-10 12:34:56 |
+| stackoverflow    | http://stackoverflow.com/ | 2024-06-10 12:34:56 |
++------------------+---------------------------+---------------------+
+```
+
+### 5.14 FORMAT() 函数
+> FORMAT() 函数用于格式化某个字段的显示方式。
+
+#### SQL FORMAT() 语法
+```sql
+SELECT FORMAT(column_name,format) FROM table_name;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites"
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+| 7  | stackoverflow | http://stackoverflow.com/ |   0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT name, url, DATE_FORMAT(Now(),'%Y-%m-%d') AS date
+FROM Websites;
+
++------------------+---------------------------+---------------------+
+| name             | url                       | date                |
++------------------+---------------------------+---------------------+
+| Google           | https://www.google.cm/    | 2024-06-10          |
+| 淘宝              | https://www.taobao.com/   | 2024-06-10          |
+| 菜鸟教程          | http://www.runoob.com/    | 2024-06-10          |
+| 微博              | http://weibo.com/         | 2024-06-10          |
+| Facebook         | https://www.facebook.com/ | 2024-06-10          |
+| stackoverflow    | http://stackoverflow.com/ | 2024-06-10          |
++------------------+---------------------------+---------------------+
+```
+
+
+
+
+
+## 6 SQL 数据类型
+
+
+## 7 SQL 快速参考
+
+| SQL 语句 | 语法 | 说明 |
+| :--- | :--- | :--- |
+| **AND / OR** | `SELECT column_name(s) FROM table_name WHERE condition AND\|OR condition` | AND：表示逻辑与；OR：表示逻辑或 |
+| **ALTER TABLE** | `ALTER TABLE table_name ADD column_name datatype`<br>`ALTER TABLE table_name DROP COLUMN column_name` | 用于修改现有表的结构，添加或删除列 |
+| **AS (alias)** | `SELECT column_name AS column_alias FROM table_name`<br>`SELECT column_name FROM table_name AS table_alias` | 用于为列或表指定别名 |
+| **BETWEEN** | `SELECT column_name(s) FROM table_name WHERE column_name BETWEEN value1 AND value2` | 用于筛选在指定范围内的记录 |
+| **CREATE DATABASE** | `CREATE DATABASE database_name` | 用于创建新数据库 |
+| **CREATE TABLE** | `CREATE TABLE table_name (column_name1 data_type, column_name2 data_type, ...)` | 用于创建新表，定义表的列和数据类型 |
+| **CREATE INDEX** | `CREATE INDEX index_name ON table_name (column_name)`<br>`CREATE UNIQUE INDEX index_name ON table_name (column_name)` | 用于在表的列上创建索引，以加速查询 |
+| **CREATE VIEW** | `CREATE VIEW view_name AS SELECT column_name(s) FROM table_name WHERE condition` | 用于创建视图，以保存复杂查询的结果 |
+| **DELETE** | `DELETE FROM table_name WHERE some_column=some_value`<br>`DELETE FROM table_name` | 用于删除表中的记录。不带 WHERE 会删除所有记录 |
+| **DROP DATABASE** | `DROP DATABASE database_name` | 用于删除数据库 |
+| **DROP INDEX** | `DROP INDEX table_name.index_name` (SQL Server)<br>`DROP INDEX index_name ON table_name` (MS Access)<br>`DROP INDEX index_name` (DB2/Oracle)<br>`ALTER TABLE table_name DROP INDEX index_name` (MySQL) | 用于删除表上的索引（不同数据库语法略有差异） |
+| **DROP TABLE** | `DROP TABLE table_name` | 用于删除表及其所有数据 |
+| **GROUP BY** | `SELECT column_name, aggregate_function(column_name) FROM table_name WHERE condition GROUP BY column_name` | 用于按一个或多个列对结果集进行分组 |
+| **HAVING** | `... GROUP BY column_name HAVING aggregate_function(column_name) operator value` | 用于对分组后的结果集进行过滤 |
+| **IN** | `SELECT column_name(s) FROM table_name WHERE column_name IN (value1, value2, ...)` | 用于筛选匹配集合中某一值的记录 |
+| **INSERT INTO** | `INSERT INTO table_name VALUES (value1, value2, ...)`<br>`INSERT INTO table_name (column1, column2, ...) VALUES (value1, value2, ...)` | 用于向表中插入新记录 |
+| **INNER JOIN** | `SELECT column_name(s) FROM table_name1 INNER JOIN table_name2 ON table_name1.column_name=table_name2.column_name` | 用于返回两个表中匹配的记录 |
+| **LEFT JOIN** | `SELECT column_name(s) FROM table_name1 LEFT JOIN table_name2 ON table_name1.column_name=table_name2.column_name` | 用于返回左表中的所有记录和右表中的匹配记录 |
+| **RIGHT JOIN** | `SELECT column_name(s) FROM table_name1 RIGHT JOIN table_name2 ON table_name1.column_name=table_name2.column_name` | 用于返回右表中的所有记录和左表中的匹配记录 |
+| **FULL JOIN** | `SELECT column_name(s) FROM table_name1 FULL JOIN table_name2 ON table_name1.column_name=table_name2.column_name` | 用于返回两个表中的所有记录，不论是否匹配 |
+| **LIKE** | `SELECT column_name(s) FROM table_name WHERE column_name LIKE pattern` | 用于筛选匹配特定模式的记录 |
+| **ORDER BY** | `SELECT column_name(s) FROM table_name ORDER BY column_name [ASC\|DESC]` | 用于对结果集进行排序。ASC 升序（默认），DESC 降序 |
+| **SELECT** | `SELECT column_name(s) FROM table_name`<br>`SELECT * FROM table_name` | 用于从表中选择数据。`*` 表示选择所有列 |
+| **SELECT DISTINCT** | `SELECT DISTINCT column_name(s) FROM table_name` | 用于返回唯一不同的值（去重） |
+| **SELECT INTO** | `SELECT * INTO new_table_name [IN externaldatabase] FROM old_table_name` | 用于从一个表中选择数据并插入到新表中 |
+| **SELECT TOP** | `SELECT TOP number\|percent column_name(s) FROM table_name` | 从表中返回前指定数量的记录（数量或百分比） |
+| **TRUNCATE TABLE** | `TRUNCATE TABLE table_name` | 用于删除表中的所有数据，但不删除表结构 |
+| **UNION** | `SELECT column_name(s) FROM table_name1 UNION SELECT column_name(s) FROM table_name2` | 用于合并结果集，**不包含**重复记录 |
+| **UNION ALL** | `SELECT column_name(s) FROM table_name1 UNION ALL SELECT column_name(s) FROM table_name2` | 用于合并结果集，**包含**重复记录 |
+| **UPDATE** | `UPDATE table_name SET column1=value, column2=value, ... WHERE some_column=some_value` | 用于修改表中的现有记录 |
+| **WHERE** | `SELECT column_name(s) FROM table_name WHERE column_name operator value` | 用于过滤记录，指定查询条件 |
