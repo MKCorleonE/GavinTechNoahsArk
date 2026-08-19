@@ -1,4 +1,4 @@
-# SQL 快如入门手册（简体中文版）
+# SQL 快速入门手册（简体中文版）
 版本：1.0.3  
 作者: MKCorleonE (https://mkcorleone.github.io/)  
 仓库: https://github.com/MKCorleonE/GavinTechNoahsArk.git/00_Fundamentals/SQL.md  
@@ -1082,7 +1082,110 @@ FROM Websites;
 
 
 ## 6 SQL 数据类型
+数据库表中的每个列都要求有名称和数据类型。SQL 开发人员必须在创建 SQL 表时决定表中的每个列将要存储的数据的类型。数据类型是一个标签，是便于 SQL 了解每个列期望存储什么类型的数据的指南，它也标识了 SQL 如何与存储的数据进行交互。
 
+| 数据类型 | 描述 |
+| :--- | :--- |
+| **CHARACTER(n)** | 字符/字符串。固定长度 n。 |
+| **VARCHAR(n)** 或 **CHARACTER VARYING(n)** | 字符/字符串。可变长度。最大长度 n。 |
+| **BINARY(n)** | 二进制串。固定长度 n。 |
+| **BOOLEAN** | 存储 TRUE 或 FALSE 值。 |
+| **VARBINARY(n)** 或 **BINARY VARYING(n)** | 二进制串。可变长度。最大长度 n。 |
+| **INTEGER(p)** | 整数值（没有小数点）。精度 p。 |
+| **SMALLINT** | 整数值（没有小数点）。精度 5。 |
+| **INTEGER** | 整数值（没有小数点）。精度 10。 |
+| **BIGINT** | 整数值（没有小数点）。精度 19。 |
+| **DECIMAL(p,s)** | 精确数值，精度 p，小数点后位数 s。例如：`decimal(5,2)` 是一个小数点前有 3 位数，小数点后有 2 位数的数字。 |
+| **NUMERIC(p,s)** | 精确数值，精度 p，小数点后位数 s。（与 DECIMAL 相同） |
+| **FLOAT(p)** | 近似数值，尾数精度 p。一个采用以 10 为基数的指数计数法的浮点数。该类型的 size 参数由一个指定最小精度的单一数字组成。 |
+| **REAL** | 近似数值，尾数精度 7。 |
+| **FLOAT** | 近似数值，尾数精度 16。 |
+| **DOUBLE PRECISION** | 近似数值，尾数精度 16。 |
+| **DATE** | 存储年、月、日的值。 |
+| **TIME** | 存储小时、分、秒的值。 |
+| **TIMESTAMP** | 存储年、月、日、小时、分、秒的值。 |
+| **INTERVAL** | 由一些整数字段组成，代表一段时间，取决于区间的类型。 |
+| **ARRAY** | 元素的固定长度的有序集合。 |
+| **MULTISET** | 元素的可变长度的无序集合。 |
+| **XML** | 存储 XML 数据。 |
+
+### SQL 数据类型快速参考手册
+然而，不同的数据库对数据类型定义提供不同的选择。下面的表格显示了各种不同的数据库平台上一些数据类型的通用名称：
+
+| 数据类型 | Access | SQL Server | Oracle | MySQL | PostgreSQL |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **boolean** | Yes/No | Bit | Byte | N/A | Boolean |
+| **integer** | Number (integer) | Int | Number | Int / Integer | Integer |
+| **float** | Number (single) | Float / Real | Number | Float / Numeric | N/A |
+| **currency** | Currency | Money | N/A | N/A | Money |
+| **string (fixed)** | N/A | Char | Char | Char | Char |
+| **string (variable)** | Text (<256)<br>Memo (65k+) | Varchar | Varchar / Varchar2 | Varchar | Varchar |
+| **binary object** | OLE Object Memo | Binary (fixed up to 8K)<br>Varbinary (<8K)<br>Image (<2GB) | Long / Raw | Blob / Text | Binary / Varbinary |
+
+### SQL 用于各种数据库的数据类型
+
+#### Microsoft Access 数据类型
+
+| 数据类型 | 描述 | 存储 |
+| :--- | :--- | :--- |
+| **Text** | 用于文本或文本与数字的组合。最多 255 个字符。 | - |
+| **Memo** | 用于更大数量的文本。最多存储 65,536 个字符。<br>注释：无法对 Memo 字段进行排序，不过它们是可搜索的。 | - |
+| **Byte** | 允许 0 到 255 的数字。 | 1 字节 |
+| **Integer** | 允许介于 -32,768 与 32,767 之间的全部数字。 | 2 字节 |
+| **Long** | 允许介于 -2,147,483,648 与 2,147,483,647 之间的全部数字。 | 4 字节 |
+| **Single** | 单精度浮点。处理大多数小数。 | 4 字节 |
+| **Double** | 双精度浮点。处理大多数小数。 | 8 字节 |
+| **Currency** | 用于货币。支持 15 位的元，外加 4 位小数。<br>提示：您可以选择使用哪个国家的货币。 | 8 字节 |
+| **AutoNumber** | 自动为每条记录分配数字，通常从 1 开始。 | 4 字节 |
+| **Date/Time** | 用于日期和时间。 | 8 字节 |
+| **Yes/No** | 逻辑字段，可以显示为 Yes/No、True/False 或 On/Off。<br>在代码中，使用常量 True 和 False（等价于 1 和 0）。<br>注释：Yes/No 字段中不允许 Null 值。 | 1 比特 |
+| **Ole Object** | 可以存储图片、音频、视频或其他 BLOBs（Binary Large OBjects）。 | 最多 1GB |
+| **Hyperlink** | 包含指向其他文件的链接，包括网页。 | - |
+| **Lookup Wizard** | 允许您创建一个可从下拉列表中进行选择的选项列表。 | 4 字节 |
+
+#### MySQL 数据类型
+在 MySQL 中，有三种主要的类型：Text（文本）、Number（数字）和 Date/Time（日期/时间）类型。
+
+#### Text 类型：
+
+| 数据类型 | 描述 |
+| :--- | :--- |
+| **CHAR(size)** | 保存固定长度的字符串（可包含字母、数字以及特殊字符）。在括号中指定字符串的长度。最多 255 个字符。 |
+| **VARCHAR(size)** | 保存可变长度的字符串（可包含字母、数字以及特殊字符）。在括号中指定字符串的最大长度。最多 255 个字符。<br>注释：如果值的长度大于 255，则被转换为 TEXT 类型。 |
+| **TINYTEXT** | 存放最大长度为 255 个字符的字符串。 |
+| **TEXT** | 存放最大长度为 65,535 个字符的字符串。 |
+| **BLOB** | 用于 BLOBs（Binary Large OBjects）。存放最多 65,535 字节的数据。 |
+| **MEDIUMTEXT** | 存放最大长度为 16,777,215 个字符的字符串。 |
+| **MEDIUMBLOB** | 用于 BLOBs（Binary Large OBjects）。存放最多 16,777,215 字节的数据。 |
+| **LONGTEXT** | 存放最大长度为 4,294,967,295 个字符的字符串。 |
+| **LONGBLOB** | 用于 BLOBs（Binary Large OBjects）。存放最多 4,294,967,295 字节的数据。 |
+| **ENUM(x,y,z,etc.)** | 允许您输入可能值的列表。可以在 ENUM 列表中列出最大 65,535 个值。如果列表中不存在插入的值，则插入空值。<br>注释：这些值是按照您输入的顺序排序的。<br>可以按照此格式输入可能的值：`ENUM('X','Y','Z')` |
+| **SET** | 与 ENUM 类似，不同的是，SET 最多只能包含 64 个列表项，且 SET 可存储一个以上的选择。 |
+
+#### Number 类型：
+
+
+| 数据类型 | 说明 |
+| :--- | :--- |
+| TINYINT(size) | 带符号：-128 到 127；无符号：0 到 255 |
+| SMALLINT(size) | 带符号：-32768 到 32767；无符号：0 到 65535。size 默认为 6 |
+| MEDIUMINT(size) | 带符号：-8388608 到 8388607；无符号：0 到 16777215。size 默认为 9 |
+| INT(size) | 带符号：-2147483648 到 2147483647；无符号：0 到 4294967295。size 默认为 11 |
+| BIGINT(size) | 带符号：-9223372036854775808 到 9223372036854775807；无符号：0 到 18446744073709551615。size 默认为 20 |
+| FLOAT(size,d) | 带有浮动小数点的小数字。size 参数规定显示最大位数，d 参数规定小数点右侧的最大位数 |
+| DOUBLE(size,d) | 带有浮动小数点的大数字。size 参数规定显示最大位数，d 参数规定小数点右侧的最大位数 |
+| DECIMAL(size,d) | 作为字符串存储的 DOUBLE 类型，允许固定的小数点。size 参数规定显示最大位数，d 参数规定小数点右侧的最大位数 |
+
+#### Date 类型：
+
+
+| 数据类型 | 说明 |
+| :--- | :--- |
+| DATE() | 日期。格式：YYYY-MM-DD。支持的范围是从 '1000-01-01' 到 '9999-12-31' |
+| DATETIME() | 日期和时间的组合。格式：YYYY-MM-DD HH:MM:SS。支持的范围是从 '1000-01-01 00:00:00' 到 '9999-12-31 23:59:59' |
+| TIMESTAMP() | 时间戳。使用 Unix 纪元('1970-01-01 00:00:00' UTC)至今的秒数来存储。格式：YYYY-MM-DD HH:MM:SS。支持的范围是从 '1970-01-01 00:00:01' UTC 到 '2038-01-09 03:14:07' UTC |
+| TIME() | 时间。格式：HH:MM:SS。支持的范围是从 '-838:59:59' 到 '838:59:59' |
+| YEAR() | 2 位或 4 位格式的年。4 位格式允许的值：1901 到 2155；2 位格式允许的值：70 到 69，表示从 1970 到 2069 |
 
 ## 7 SQL 快速参考
 
