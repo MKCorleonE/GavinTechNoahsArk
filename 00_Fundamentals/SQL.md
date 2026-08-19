@@ -467,8 +467,193 @@ SELECT TOP 50 PERCENT * FROM Websites;
 |  2 | 淘宝          | https://www.taobao.com/   |    13 | CN      |
 |  3 | 菜鸟教程       | http://www.runoob.com/    |  5000 | USA     |
 +----+---------------+---------------------------+-------+---------+
-
 ```
+
+### 4.2 LIKE 语句
+> LIKE 语句用于在 WHERE 子句中搜索列中的指定模式。它通常与通配符一起使用。
+
+#### SQL LIKE 语法
+```sql
+SELECT column1, column2, ...
+FROM table_name
+WHERE column_name LIKE pattern;
+```
+参数说明：
+- column1, column2, ...：要选择的字段名称，可以为多个字段。如果不指定字段名称，则会选择所有字段。
+- table_name：要查询的表名称。
+- column：要搜索的字段名称。
+- pattern：搜索模式。
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites" 表的数据：
+```sql
+SELECT * FROM Websites;
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  1 | Google        | https://www.google.cm/    |     1 | USA     |
+|  2 | 淘宝          | https://www.taobao.com/   |    13 | CN      |
+|  3 | 菜鸟教程       | http://www.runoob.com/    |  5000 | USA     |
+|  4 | 微博           | http://weibo.com/         |    20 | CN      |
+|  5 | Facebook      | https://www.facebook.com/ |     3 | USA     |
+|  7 | stackoverflow | http://stackoverflow.com/ |     0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT * FROM Websites
+WHERE name LIKE 'G%';
+
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  1 | Google        | https://www.google.cm/    |     1 | USA     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT * FROM Websites
+WHERE name LIKE '%k';
+
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  5 | Facebook      | https://www.facebook.com/ |     3 | USA     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT * FROM Websites
+WHERE name LIKE '%oo%';
+
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  1 | Google        | https://www.google.cm/    |     1 | USA     |
+|  5 | Facebook      | https://www.facebook.com/ |     3 | USA     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT * FROM Websites
+WHERE name NOT LIKE '%oo%';
+
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  2 | 淘宝          | https://www.taobao.com/   |    13 | CN      |
+|  3 | 菜鸟教程       | http://www.runoob.com/    |  5000 | USA     |
+|  4 | 微博           | http://weibo.com/         |    20 | CN      |
+|  7 | stackoverflow | http://stackoverflow.com/ |     0 | IND     |
++----+---------------+---------------------------+-------+---------+
+```
+
+### 4.3 IN 语句
+> IN 语句用于在 WHERE 子句中指定多个可能的值。它可以替代多个 OR 条件，从而使查询更简洁。
+
+#### SQL IN 语法
+```sql
+SELECT column1, column2, ...
+FROM table_name
+WHERE column IN (value1, value2, ...);
+```
+参数说明：
+- column1, column2, ...：要选择的字段名称，可以为多个字段。如果不指定字段名称，则会选择所有字段。
+- table_name：要查询的表名称。
+- column：要查询的字段名称。
+- value1, value2, ...：要查询的值，可以为多个值。
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites"
+```sql
+SELECT * FROM Websites;
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  1 | Google        | https://www.google.cm/    |     1 | USA     |
+|  2 | 淘宝          | https://www.taobao.com/   |    13 | CN      |
+|  3 | 菜鸟教程       | http://www.runoob.com/    |  5000 | USA     |
+|  4 | 微博           | http://weibo.com/         |    20 | CN      |
+|  5 | Facebook      | https://www.facebook.com/ |     3 | USA     |
+|  7 | stackoverflow | http://stackoverflow.com/ |     0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT * FROM Websites
+WHERE name IN ('Google','菜鸟教程');
+
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  1 | Google        | https://www.google.cm/    |     1 | USA     |
+|  3 | 菜鸟教程       | http://www.runoob.com/    |  5000 | USA     |
++----+---------------+---------------------------+-------+---------+
+```
+
+### 4.4 GROUP BY 语句
+> GROUP BY 语句用于将具有相同值的行分组。它通常与聚合函数（如 COUNT、SUM、AVG 等）一起使用，以对每个分组执行计算。
+
+#### SQL GROUP BY 语法
+```sql
+SELECT column_name, aggregate_function(column_name)
+FROM table_name
+WHERE column_name operator value
+GROUP BY column_name;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites"
+```sql
+SELECT * FROM Websites;
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+| 7  | stackoverflow | http://stackoverflow.com/ |   0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT * FROM access_log;
++-----+---------+-------+------------+
+| aid | site_id | count | date       |
++-----+---------+-------+------------+
+|   1 |       1 |    45 | 2016-05-10 |
+|   2 |       3 |   100 | 2016-05-13 |
+|   3 |       1 |   230 | 2016-05-14 |
+|   4 |       2 |    10 | 2016-05-14 |
+|   5 |       5 |   205 | 2016-05-14 |
+|   6 |       4 |    13 | 2016-05-15 |
+|   7 |       3 |   220 | 2016-05-15 |
+|   8 |       5 |   545 | 2016-05-16 |
+|   9 |       3 |   201 | 2016-05-17 |
++-----+---------+-------+------------+
+
+SELECT site_id, SUM(access_log.count) AS nums
+FROM access_log GROUP BY site_id;
+
++---------+------+
+| site_id | nums |
++---------+------+
+|       1 |  275 |
+|       2 |   10 |
+|       3 |  521 |
+|       4 |   13 |
+|       5 |  750 |
++---------+------+
+
+SELECT Websites.name,COUNT(access_log.aid) AS nums FROM access_log 
+LEFT JOIN Websites
+ON access_log.site_id=Websites.id
+GROUP BY Websites.name;
+
++---------+------+
+| name    | nums |
++---------+------+
+| Google  |    2 |
+| 淘宝      |  1 |
+| 菜鸟教程  |  3 |
+| 微博      |  1 |
+| Facebook |   2 |
++---------+------+
+```
+
+### 4.5 HAVING 语句
+
+### 4.6 EXISTS 语句
 
 ## 5 SQL 函数
 > SQL 拥有很多可用于计数和计算的内建函数。SQL 函数可以用于计算数据、格式化数据、处理字符串、日期和时间等。SQL 函数可以分为以下两类。
