@@ -635,7 +635,7 @@ FROM access_log GROUP BY site_id;
 |       5 |  750 |
 +---------+------+
 
-SELECT Websites.name,COUNT(access_log.aid) AS nums FROM access_log 
+SELECT Websites.name, COUNT(access_log.aid) AS nums FROM access_log 
 LEFT JOIN Websites
 ON access_log.site_id=Websites.id
 GROUP BY Websites.name;
@@ -652,6 +652,64 @@ GROUP BY Websites.name;
 ```
 
 ### 4.5 HAVING 语句
+> 在 SQL 中增加 HAVING 子句原因是，WHERE 关键字无法与聚合函数一起使用。HAVING 子句可以让我们筛选分组后的各组数据。
+
+#### SQL HAVING 语法
+```sql
+SELECT column1, aggregate_function(column2)
+FROM table_name
+GROUP BY column1
+HAVING condition;
+```
+参数说明：
+- `column1`：要检索的列。
+- `aggregate_function(column2)`：一个聚合函数，例如SUM、COUNT、AVG等，应用于column2的值。
+- `table_name`：要从中检索数据的表。
+- `GROUP BY column1`：根据column1列的值对数据进行分组。
+- `HAVING condition`：一个条件，用于筛选分组的结果。只有满足条件的分组会包含在结果集中。
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites" 和 “access_log” 表的数据：
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+| 7  | stackoverflow | http://stackoverflow.com/ |   0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
++-----+---------+-------+------------+
+| aid | site_id | count | date       |
++-----+---------+-------+------------+
+|   1 |       1 |    45 | 2016-05-10 |
+|   2 |       3 |   100 | 2016-05-13 |
+|   3 |       1 |   230 | 2016-05-14 |
+|   4 |       2 |    10 | 2016-05-14 |
+|   5 |       5 |   205 | 2016-05-14 |
+|   6 |       4 |    13 | 2016-05-15 |
+|   7 |       3 |   220 | 2016-05-15 |
+|   8 |       5 |   545 | 2016-05-16 |
+|   9 |       3 |   201 | 2016-05-17 |
++-----+---------+-------+------------+
+
+SELECT Websites.name, Websites.url, SUM(access_log.count) AS nums FROM (access_log
+INNER JOIN Websites
+ON access_log.site_id=Websites.id)
+GROUP BY Websites.name
+HAVING SUM(access_log.count) > 200;
+
++---------+---------------------------+------+
+| name    | url                       | nums |
++---------+---------------------------+------+
+| Google  | https://www.google.cm/    |  275 |
+| 菜鸟教程  | http://www.runoob.com/   |  521 |
++---------+---------------------------+------+
+
+```
 
 ### 4.6 EXISTS 语句
 
