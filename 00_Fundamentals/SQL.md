@@ -965,6 +965,19 @@ WHERE a.site_id=w.id and w.name="菜鸟教程";
 #### 图片解读
 ![JOIN 类型示意图](./figures/sql-join.png)
 
+#### SQL JOIN 语法
+```sql
+SELECT column1, column2, ...
+FROM table1
+JOIN table2 ON condition;
+```
+参数说明：
+- column1, column2, ...：要选择的字段名称，可以为多个字段。如果不指定字段名称，则会选择所有字段。
+- table1：要连接的第一个表。
+- table2：要连接的第二个表。
+- condition：连接条件，用于指定连接方式。
+
+
 ## 5 SQL 函数
 > SQL 拥有很多可用于计数和计算的内建函数。SQL 函数可以用于计算数据、格式化数据、处理字符串、日期和时间等。SQL 函数可以分为以下两类。
 
