@@ -24,7 +24,9 @@
   - [4.4 GROUP BY 语句](#44-group-by-语句)
   - [4.5 HAVING 语句](#45-having-语句)
   - [4.6 EXISTS 语句](#46-exists-语句)
-  - 
+  - [4.7 BETWEEN 语句](#47-between-语句)
+  - [4.8 As 语句](#48-as-语句)
+
 - [5 SQL 函数](#5-sql-函数)
   - [5.1 AVG() 函数](#51-avg-函数)
   - [5.2 COUNT() 函数](#52-count-函数)
@@ -785,6 +787,94 @@ WHERE NOT EXISTS (SELECT count FROM access_log WHERE Websites.id = access_log.si
 | 微博      | http://weibo.com/         |
 +---------+---------------------------+
 ```
+
+### 4.7 BETWEEN 语句
+> BETWEEN 操作符选取介于两个值之间的数据范围内的值，这些值可以是数值、文本或者日期。
+
+#### SQL BETWEEN 语法
+```sql
+SELECT column1, column2, ...
+FROM table_name
+WHERE column BETWEEN value1 AND value2;
+```
+
+参数说明：
+- column1, column2, ...：要选择的字段名称，可以为多个字段。如果不指定字段名称，则会选择所有字段。
+- table_name：要查询的表名称。
+- column：要查询的字段名称。
+- value1：范围的起始值。
+- value2：范围的结束值。
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites" 表的数据：
+```sql
+mysql> SELECT * FROM Websites;
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  1 | Google        | https://www.google.cm/    |     1 | USA     |
+|  2 | 淘宝          | https://www.taobao.com/   |    13 | CN      |
+|  3 | 菜鸟教程       | http://www.runoob.com/    |  5000 | USA     |
+|  4 | 微博           | http://weibo.com/         |    20 | CN      |
+|  5 | Facebook      | https://www.facebook.com/ |     3 | USA     |
+|  7 | stackoverflow | http://stackoverflow.com/ |     0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT * FROM WebsitesWHERE alexa BETWEEN 1 AND 20;
+
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  1 | Google        | https://www.google.cm/    |     1 | USA     |
+|  2 | 淘宝          | https://www.taobao.com/   |    13 | CN      |
+|  4 | 微博           | http://weibo.com/         |    20 | CN      |
+|  5 | Facebook      | https://www.facebook.com/ |     3 | USA     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT * FROM WebsitesWHERE alexa NOT BETWEEN 1 AND 20;
+
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  3 | 菜鸟教程       | http://www.runoob.com/    |  5000 | USA     |
+|  7 | stackoverflow | http://stackoverflow.com/ |     0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT * FROM WebsitesWHERE (alexa BETWEEN 1 AND 20)AND country NOT 
+ IN ('USA', 'IND');
+
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  2 | 淘宝          | https://www.taobao.com/   |    13 | CN      |
+|  4 | 微博           | http://weibo.com/         |    20 | CN      |
++----+---------------+---------------------------+-------+---------+
+
+SELECT * FROM WebsitesWHERE name BETWEEN 'A' AND 'H';
+
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  1 | Google        | https://www.google.cm/    |     1 | USA     |
+|  5 | Facebook      | https://www.facebook.com/ |     3 | USA     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT * FROM WebsitesWHERE name NOT BETWEEN 'A' AND 'H';
+
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  2 | 淘宝          | https://www.taobao.com/   |    13 | CN      |
+|  3 | 菜鸟教程       | http://www.runoob.com/    |  5000 | USA     |
+|  4 | 微博           | http://weibo.com/         |    20 | CN      |
+|  7 | stackoverflow | http://stackoverflow.com/ |     0 | IND     |
++----+---------------+---------------------------+-------+---------+
+```
+
+### 4.8 AS 语句
+> AS 语句用于为列或表指定别名。别名仅在查询中有效，并不会更改数据库中的实际列名或表名。使用 AS 可以使查询结果更易读。
+
+
 
 ## 5 SQL 函数
 > SQL 拥有很多可用于计数和计算的内建函数。SQL 函数可以用于计算数据、格式化数据、处理字符串、日期和时间等。SQL 函数可以分为以下两类。
