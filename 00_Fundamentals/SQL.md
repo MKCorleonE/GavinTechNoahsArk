@@ -725,6 +725,66 @@ HAVING SUM(access_log.count) > 200;
 ```
 
 ### 4.6 EXISTS 语句
+> EXISTS 运算符用于判断查询子句是否有记录，如果有一条或多条记录存在返回 True，否则返回 False。
+
+#### SQL EXISTS 语法
+```sql
+SELECT column_name(s)
+FROM table_name
+WHERE EXISTS
+(SELECT column_name FROM table_name WHERE condition);
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites"
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝       | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程 | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博       | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
++----+--------------+---------------------------+-------+---------+
+
++-----+---------+-------+------------+
+| aid | site_id | count | date       |
++-----+---------+-------+------------+
+|   1 |       1 |    45 | 2016-05-10 |
+|   2 |       3 |   100 | 2016-05-13 |
+|   3 |       1 |   230 | 2016-05-14 |
+|   4 |       2 |    10 | 2016-05-14 |
+|   5 |       5 |   205 | 2016-05-14 |
+|   6 |       4 |    13 | 2016-05-15 |
+|   7 |       3 |   220 | 2016-05-15 |
+|   8 |       5 |   545 | 2016-05-16 |
+|   9 |       3 |   201 | 2016-05-17 |
++-----+---------+-------+------------+
+
+SELECT Websites.name, Websites.url 
+FROM Websites 
+WHERE EXISTS (SELECT count FROM access_log WHERE Websites.id = access_log.site_id AND count > 200);
+
++---------+---------------------------+
+| name    | url                       |
++---------+---------------------------+
+| Google  | https://www.google.cm/    |
+| 菜鸟教程  | http://www.runoob.com/    |
+| Facebook | https://www.facebook.com/ |
++---------+---------------------------+
+
+SELECT Websites.name, Websites.url 
+FROM Websites 
+WHERE NOT EXISTS (SELECT count FROM access_log WHERE Websites.id = access_log.site_id AND count > 200);
+
++---------+---------------------------+
+| name    | url                       |
++---------+---------------------------+
+| 淘宝      | https://www.taobao.com/   |
+| 微博      | http://weibo.com/         |
++---------+---------------------------+
+```
 
 ## 5 SQL 函数
 > SQL 拥有很多可用于计数和计算的内建函数。SQL 函数可以用于计算数据、格式化数据、处理字符串、日期和时间等。SQL 函数可以分为以下两类。
