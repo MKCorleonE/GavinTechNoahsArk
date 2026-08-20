@@ -26,6 +26,8 @@
   - [4.6 EXISTS 语句](#46-exists-语句)
   - [4.7 BETWEEN 语句](#47-between-语句)
   - [4.8 As 语句](#48-as-语句)
+  - [4.9 JOIN 语句](#49-join-语句)
+  - 
 
 - [5 SQL 函数](#5-sql-函数)
   - [5.1 AVG() 函数](#51-avg-函数)
@@ -42,6 +44,7 @@
   - [5.12 ROUND() 函数](#512-round-函数)
   - [5.13 NOW() 函数](#513-now-函数)
   - [5.14 FORMAT() 函数](#514-format-函数)
+  - [5.15 CONCAT() 函数](#515-concat-函数)
 - [6 SQL 数据类型](#6-sql-数据类型)
 - [7 SQL 快速参考](#7-sql-快速参考)
 
@@ -874,7 +877,93 @@ SELECT * FROM WebsitesWHERE name NOT BETWEEN 'A' AND 'H';
 ### 4.8 AS 语句
 > AS 语句用于为列或表指定别名。别名仅在查询中有效，并不会更改数据库中的实际列名或表名。使用 AS 可以使查询结果更易读。
 
+#### 列的 SQL 别名语法
+```sql
+SELECT column_name AS alias_name
+FROM table_name;
+```
 
+#### 表的 SQL 别名语法
+```sql
+SELECT column_name(s)
+FROM table_name AS alias_name;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites"
+```sql
+mysql> SELECT * FROM Websites;
++----+---------------+---------------------------+-------+---------+
+| id | name          | url                       | alexa | country |
++----+---------------+---------------------------+-------+---------+
+|  1 | Google        | https://www.google.cm/    |     1 | USA     |
+|  2 | 淘宝          | https://www.taobao.com/   |    13 | CN      |
+|  3 | 菜鸟教程       | http://www.runoob.com/    |  5000 | USA     |
+|  4 | 微博           | http://weibo.com/         |    20 | CN      |
+|  5 | Facebook      | https://www.facebook.com/ |     3 | USA     |
+|  7 | stackoverflow | http://stackoverflow.com/ |     0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+mysql> SELECT * FROM access_log;
++-----+---------+-------+------------+
+| aid | site_id | count | date       |
++-----+---------+-------+------------+
+|   1 |       1 |    45 | 2016-05-10 |
+|   2 |       3 |   100 | 2016-05-13 |
+|   3 |       1 |   230 | 2016-05-14 |
+|   4 |       2 |    10 | 2016-05-14 |
+|   5 |       5 |   205 | 2016-05-14 |
+|   6 |       4 |    13 | 2016-05-15 |
+|   7 |       3 |   220 | 2016-05-15 |
+|   8 |       5 |   545 | 2016-05-16 |
+|   9 |       3 |   201 | 2016-05-17 |
++-----+---------+-------+------------+
+9 rows in set (0.00 sec)
+
+SELECT name AS n, country AS c
+FROM Websites;
+
++--------------+---------+
+| n            | c       |
++--------------+---------+
+| Google       | USA     |
+| 淘宝          | CN      |
+| 菜鸟教程       | USA     |
+| 微博          | CN      |
+| Facebook     | USA     |
+| stackoverflow | IND     |
++--------------+---------+
+
+SELECT w.name, w.url, a.count, a.date 
+FROM Websites AS w, access_log AS a  
+WHERE a.site_id=w.id and w.name="菜鸟教程";
+
++--------------+---------------------------+-------+------------+
+| name         | url                       | count | date       |
++--------------+---------------------------+-------+------------+
+| 菜鸟教程       | http://www.runoob.com/    |   100 | 2016-05-13 |
+| 菜鸟教程       | http://www.runoob.com/    |   220 | 2016-05-15 |
+| 菜鸟教程       | http://www.runoob.com/    |   201 | 2016-05-17 |
++--------------+---------------------------+-------+------------+
+```
+
+### 4.9 JOIN 语句
+> JOIN 语句用于根据两个或多个表之间的关系，从这些表中查询数据。JOIN 语句可以将来自不同表的数据组合在一起，形成一个新的结果集。
+
+#### JOIN 类型
+
+| 类型 | 描述 |
+| :--- | :--- |
+| INNER JOIN | 返回两个表中满足连接条件的记录（交集）。 |
+| LEFT JOIN | 返回左表中的所有记录，即使右表中没有匹配的记录（保留左表）。 |
+| RIGHT JOIN | 返回右表中的所有记录，即使左表中没有匹配的记录（保留右表）。 |
+| FULL OUTER JOIN | 返回两个表的并集，包含匹配和不匹配的记录。 |
+| CROSS JOIN | 返回两个表的笛卡尔积，每条左表记录与每条右表记录进行组合。 |
+| SELF JOIN | 将一个表与自身连接。 |
+| NATURAL JOIN | 基于同名字段自动匹配连接的表。 |
+
+#### 图片解读
+![JOIN 类型示意图](./figures/sql-join.png)
 
 ## 5 SQL 函数
 > SQL 拥有很多可用于计数和计算的内建函数。SQL 函数可以用于计算数据、格式化数据、处理字符串、日期和时间等。SQL 函数可以分为以下两类。
@@ -1483,6 +1572,42 @@ FROM Websites;
 +------------------+---------------------------+---------------------+
 ```
 
+### 5.15 CONCAT() 函数
+> CONCAT() 函数用于将两个或多个字符串连接在一起。
+
+#### SQL CONCAT() 语法
+```sql
+SELECT CONCAT(string1, string2, ...) FROM table_name;
+```
+
+#### 示例
+我们将使用 RUNOOB 样本数据库。下面是选自 "Websites"
+```sql
++----+--------------+---------------------------+-------+---------+
+| id | name         | url                       | alexa | country |
++----+--------------+---------------------------+-------+---------+
+| 1  | Google       | https://www.google.cm/    | 1     | USA     |
+| 2  | 淘宝          | https://www.taobao.com/   | 13    | CN      |
+| 3  | 菜鸟教程      | http://www.runoob.com/    | 4689  | CN      |
+| 4  | 微博          | http://weibo.com/         | 20    | CN      |
+| 5  | Facebook     | https://www.facebook.com/ | 3     | USA     |
+| 7  | stackoverflow | http://stackoverflow.com/ |   0 | IND     |
++----+---------------+---------------------------+-------+---------+
+
+SELECT name, CONCAT(url, ', ', alexa, ', ', country) AS site_info
+FROM Websites;
+
++------------------+-----------------------------------------------+
+| name             | site_info                                     |
++------------------+-----------------------------------------------+
+| Google           | https://www.google.cm/, 1, USA                |
+| 淘宝              | https://www.taobao.com/, 13, CN               |
+| 菜鸟教程          | http://www.runoob.com/, 4689, CN              |
+| 微博              | http://weibo.com/, 20, CN                      |
+| Facebook         | https://www.facebook.com/, 3, USA             |
+| stackoverflow    | http://stackoverflow.com/, 0, IND             |
++------------------+-----------------------------------------------+
+```
 
 
 
