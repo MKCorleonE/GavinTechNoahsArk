@@ -1,5 +1,5 @@
 # SQL 快速入门手册（简体中文版）
-版本：1.0.3  
+版本：1.5  
 作者: MKCorleonE (https://mkcorleone.github.io/)  
 仓库: https://github.com/MKCorleonE/GavinTechNoahsArk.git/00_Fundamentals/SQL.md  
 鸣谢: 菜鸟教程 (https://www.runoob.com/sql/sql-tutorial.html)
@@ -27,6 +27,7 @@
   - [4.7 BETWEEN 语句](#47-between-语句)
   - [4.8 As 语句](#48-as-语句)
   - [4.9 JOIN 语句](#49-join-语句)
+  - [4.10 UNION 语句](#410-union-语句)
   - 
 
 - [5 SQL 函数](#5-sql-函数)
@@ -977,6 +978,57 @@ JOIN table2 ON condition;
 - table2：要连接的第二个表。
 - condition：连接条件，用于指定连接方式。
 
+#### SQL INNER JOIN 语法
+```sql
+SELECT column_name(s)
+FROM table1
+INNER JOIN table2
+ON table1.column_name=table2.column_name;
+
+SELECT column_name(s)
+FROM table1
+JOIN table2
+ON table1.column_name=table2.column_name;
+```
+
+#### SQL LEFT JOIN 语法
+```sql
+SELECT column_name(s)
+FROM table1
+LEFT JOIN table2
+ON table1.column_name=table2.column_name;
+
+SELECT column_name(s)
+FROM table1
+LEFT OUTER JOIN table2
+ON table1.column_name=table2.column_name;
+```
+
+#### SQL RIGHT JOIN 语法
+```sql
+SELECT column_name(s)
+FROM table1
+RIGHT JOIN table2
+ON table1.column_name=table2.column_name;
+
+SELECT column_name(s)
+FROM table1
+RIGHT OUTER JOIN table2
+ON table1.column_name=table2.column_name;
+```
+
+#### SQL FULL OUTER JOIN 语法
+```sql
+SELECT column_name(s)
+FROM table1
+FULL OUTER JOIN table2
+ON table1.column_name=table2.column_name;
+```
+
+### 4.10 UNION 语句
+```sql
+
+```
 
 ## 5 SQL 函数
 > SQL 拥有很多可用于计数和计算的内建函数。SQL 函数可以用于计算数据、格式化数据、处理字符串、日期和时间等。SQL 函数可以分为以下两类。
