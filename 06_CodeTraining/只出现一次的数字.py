@@ -22,4 +22,18 @@ from functools import reduce
 
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
-        return reduce(lambda x, y: x ^ y, nums)
+        return reduce(lambda x, y: x ^ y, nums)      
+        # reduce()函数是将序列中的元素依次两两合并进行操作。
+
+"""
+异或运算的性质：
+a ^ a == 0      # 相同数字异或会抵消
+a ^ 0 == a      # 与 0 异或不变
+a ^ b == b ^ a  # 顺序无关
+
+所以：
+2 ^ 3 ^ 2
+= (2 ^ 2) ^ 3
+= 0 ^ 3
+= 3
+"""

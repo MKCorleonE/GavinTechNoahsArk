@@ -42,20 +42,22 @@ BBRBRBBR
 # 最佳答案
 import sys
 
-data = sys.stdin.read().split()
+data = sys.stdin.read().split() # 读取所有输入数据（笔试中常用）
 n = int(data[0])
 s = data[1]
 
-blue_runs = 0
-red_runs = 0
-prev = ''
+blue_runs = 0   # 蓝色连续段数量
+red_runs = 0    # 红色连续段数量
+prev = ''       # 保存前一个格子的颜色
 
 for ch in s:
+    # 当前颜色与前一个颜色不同时，说明进入了新的连续段
     if ch != prev:
         if ch == 'B':
             blue_runs += 1
         else:
             red_runs += 1
+
         prev = ch
 
 print(min(blue_runs, red_runs) + 1)
