@@ -21,11 +21,11 @@
 from collections import Counter
 
 def findAnagrams(s: str, p: str):
-    if len(s) < len(p):
+    if len(s) < len(p):    # 如果 s 的长度小于 p 的长度，直接返回空列表
         return []
     
-    need = Counter(p)
-    window = Counter()
+    need = Counter(p)      # 目标窗口
+    window = Counter()     # 当前窗口
     left = 0
     res = []
     
@@ -62,6 +62,8 @@ def findAnagrams(s: str, p: str):
 # 使用滑动窗口的方法来解决这个问题。我们维护一个窗口，窗口的大小等于字符串 p 的长度。
 # 在每次移动窗口时，我们更新窗口内的字符计数，并与字符串 p 的字符计数进行比较。
 # 如果两者相等，则说明当前窗口内的子串是字符串 p 的异位词。
+
+# enumerate()函数：第一个是索引，第二个是值
 
 # 另外一种写法：
 class Solution:
