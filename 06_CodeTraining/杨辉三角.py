@@ -14,13 +14,12 @@
 # 最佳答案，动态规划
 class Solution:
     def generate(self, numRows: int) -> List[List[int]]:
-        c = []
-        for i in range(numRows):
+        c = []   # 空数组，用于存储杨辉三角的每一行
+        for i in range(numRows):   # 生成杨辉三角的每一行，初始化为1
             c.append([1] * (i + 1))
-        for i in range(2, numRows):
-            for j in range(1, i):
-                # 左上方的数 + 正上方的数
-                c[i][j] = c[i - 1][j - 1] + c[i - 1][j]
+        for i in range(2, numRows):   # 从第3行开始，前两行已经初始化为1
+            for j in range(1, i):   # 每一行的第一个数和最后一个数都是1，所以从1开始到i-1结束（索引）
+                c[i][j] = c[i - 1][j - 1] + c[i - 1][j]   # 左上方的数 + 正上方的数
         return c
 
 # 复杂度分析
