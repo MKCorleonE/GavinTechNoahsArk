@@ -29,13 +29,13 @@ class Solution:
         for c in s:
             if c == '[':
                 stack.append([multi, res])
-                res, multi = "", 0
+                res, multi = "", 0   # 重置 res 和 multi，以便处理括号内的字符串和数字
             elif c == ']':
                 cur_multi, last_res = stack.pop()
                 res = last_res + cur_multi * res
-            elif '0' <= c <= '9':
-                multi = multi * 10 + int(c)            
-            else:
+            elif '0' <= c <= '9':   # 判断字符 c 是否为数字字符，但此时的 c 是字符串类型，所以需要将其转换为整数类型
+                multi = multi * 10 + int(c)   # 处理多位数的情况，例如 12[ab]，需要将 multi 乘以 10 再加上当前数字
+            else:  
                 res += c
         return res
 
@@ -47,3 +47,4 @@ class Solution:
 # 本题难点在于括号内嵌套括号，需要从内向外生成与拼接字符串，这与栈的先入后出特性对应。
 # 栈的类型都是 list，栈中存储的是一个列表，列表中包含两个元素：当前的 multi 和 res。
 # {}是字典，[]是列表，()是元组。 
+# elif '0' <= c <= '9': 判断字符 c 是否为数字字符，但此时的 c 是字符串类型，所以需要将其转换为整数类型
