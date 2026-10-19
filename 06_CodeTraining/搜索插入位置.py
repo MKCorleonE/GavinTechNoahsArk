@@ -24,12 +24,14 @@ def search_insert(nums, target):
 
         if nums[mid] == target:
             return mid
-        elif nums[mid] < target:
-            left = mid + 1
+        elif nums[mid] < target:   # 如果第一个if条件不满足，进入这个elif条件，判断 nums[mid] 是否小于 target
+            left = mid + 1   # 如果 nums[mid] 小于 target，说明目标值在 mid 的右侧，所以将左指针 left 移动到 mid + 1
         else:
-            right = mid - 1
+            right = mid - 1  # 如果 nums[mid] 大于 target，说明目标值在 mid 的左侧，所以将右指针 right 移动到 mid - 1
 
-    return left
+    return left   
+    # 为什么是返回 left 而不是 right？因为当循环结束时，left 指针指向的就是目标值应该插入的位置，
+    # 而 right 指针指向的则是目标值应该插入位置的前一个位置。
 
 # 复杂度分析：
 # 时间复杂度：O(log n)，其中 n 是数组 nums 的长度。我们使用二分查找算法，每次将搜索范围减半，因此时间复杂度为 O(log n)。
