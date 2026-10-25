@@ -21,11 +21,11 @@ class Solution:
     def longestConsecutive(self, nums: list[int]) -> int:
         hash_map = set(nums) # 将数组转换为集合，去重并提供 O(1) 的查找时间
         ans = 0 # 创建答案对象
-        for x in set:
-            if x - 1 in set:
+        for x in hash_map: # 遍历集合中的每个元素
+            if x - 1 in hash_map:
                 continue # 如果 x-1 在集合中，说明 x 不是连续序列的起点，跳过
             y = x + 1
-            while y in set:
+            while y in hash_map: # 如果 y 在集合中，说明 y 是连续序列的一部分
                 y += 1
             ans = max(ans, y - x)
         return ans
@@ -38,3 +38,22 @@ class Solution:
 # 笔记
 # 不能排序，因为排序的时间复杂度是 O(nlogn)。
 # for循环，时间复杂度是 O(n)；while循环，时间复杂度是 O(n)
+
+
+# 超时答案
+class Solution:
+    def longestConsecutive(self, nums: list[int]) -> int:
+        hash_map = set(nums)
+        ans = 0
+        for num in nums:
+            while num - 1 in hash_map:
+                num -= 1
+            y = num + 1
+            while y in hash_map:
+                y += 1
+            ans = max(ans, y - num)
+        return ans
+
+# 超时原因：
+# 1. 对于每个数字，我们都在 while 循环中查找它的前一个数字和后一个数字，这可能导致重复的查找。
+# 2. 如果数组中有很多连续的数字，这种方法会导致大量的重复计算，从而增加了时间复杂度。

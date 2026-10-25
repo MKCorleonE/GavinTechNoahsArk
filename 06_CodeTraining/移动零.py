@@ -15,14 +15,25 @@
 输出: [0]
 """
 
-
+# 最佳答案，双指针
 class Solution:
     def moveZeroes(self, nums: List[int]) -> None:
-        stack_size = 0
-        for x in nums:
-            if x:
-                nums[stack_size] = x
-                stack_size += 1
-        for i in range(stack_size, len(nums)):
-            nums[i] = 0
+        pointer = 0                               # 定义一个指针，指向当前非零元素应该放置的位置
+        for num in nums:
+            if num:                               # 如果当前元素非零，则将其放置在指针位置，并将指针向前移动
+                nums[pointer] = num
+                pointer += 1
         
+        for zero in range(pointer, len(nums)):
+            nums[zero] = 0
+        
+        # return nums 如果是函数返回值的话可以加上这一行，但题目要求原地修改，所以不需要返回值。
+        
+# 复杂度分析：
+# 时间复杂度：O(n)，其中 n 是数组的长度。我们只需要遍历数组一次。
+# 空间复杂度：O(1)。我们只使用了常数级别的额外空间。
+
+# 如何设计测试用例：
+# 1. 测试用例中包含多个零和非零元素，确保非零元素的相对顺序保持不变。
+# 2. 测试用例中包含所有元素都是零的情况，确保函数能够正确处理。
+
