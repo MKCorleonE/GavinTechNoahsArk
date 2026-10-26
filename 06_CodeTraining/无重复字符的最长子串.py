@@ -22,9 +22,10 @@
 2. 子序列不要求连续
 """
 
+# 最佳答案
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        if not s: return 0
+        if not s: return 0   # 如果字符串为空，直接返回0
         left = 0 # 用来记录左边界
         lookup = set() # 用来存储当前子串中的字符
         n =len(s) 
@@ -36,6 +37,11 @@ class Solution:
                 lookup.remove(s[left])
                 left += 1
                 cur_len -= 1
-            if cur_len > max_len:max_len = cur_len
+            if cur_len > max_len:
+                max_len = cur_len
             lookup.add(s[i])
         return max_len
+
+# 复杂度分析：
+# 时间复杂度：O(n)，其中 n 是字符串 s 的长度。我们只需要遍历字符串一次。
+# 空间复杂度：O(min(n, m))，其中 m 是字符集的大小。我们使用了一个集合来存储当前子串中的字符，最坏情况下需要 O(n) 的额外空间。

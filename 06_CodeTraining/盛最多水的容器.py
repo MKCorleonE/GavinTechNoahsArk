@@ -14,11 +14,12 @@
 输出：1
 """
 
+# 最佳答案
 class Solution:
     def maxArea(self, height: List[int]) -> int:
         ans = left = 0
         right = len(height) - 1
-        while left < right:
+        while left < right:   # 当左指针小于右指针时，继续循环
             area = (right - left) * min(height[left], height[right])
             ans = max(ans, area)
             if height[left] < height[right]:
@@ -28,3 +29,7 @@ class Solution:
                 # height[right] 与左边的任意垂线都无法组成一个比 ans 更大的面积
                 right -= 1
         return ans
+
+# 复杂度分析：
+# 时间复杂度：O(n)，其中 n 是数组 height 的长度。我们只需要遍历数组一次。
+# 空间复杂度：O(1)。我们只使用了常数级别的额外空间。
